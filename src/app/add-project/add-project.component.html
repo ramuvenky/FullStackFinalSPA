@@ -1,0 +1,180 @@
+﻿<div class="form-group row col-sm-12">
+  <label for="Project_Name" class="col-sm-2 col-form-label">Project:</label>
+  <div class="col-sm-10">
+    <input type="text" [(ngModel)]="currentProject.Project_Name" name="Project_Name" class="form-control" />
+  </div>
+</div>
+<div class="form-group row col-sm-12">
+  <div class="offset-sm-2 col-sm-4 form-check">
+    <input type="checkbox" class="mx-1 form-check-input" (change)="changeEvent($event)" />
+    <label for="StartDate" class="mx-4 form-check-label">Set Start and End Date</label>
+  </div>
+  <div class="col-sm-3">
+    <input type="date" [disabled]="!setDatesChecked" placeholder="Start date" [(ngModel)]="currentProject.StartDate" name="StartDate" class="form-control" />
+  </div>
+  <div class="col-sm-3">
+    <input type="date" [disabled]="!setDatesChecked" placeholder="End date" [(ngModel)]="currentProject.EndDate" name="EndDate" class="form-control" />
+  </div>  
+</div>
+
+<div class="form-group row col-sm-12">
+  <label for="Priority" class="col-sm-2 col-form-label">Priority:</label>
+  <div class="col-sm-10 my-2">
+    <input type="range" min="0" max="30" step="1" [(ngModel)]="currentProject.Priority" name="Priority" class="form-control-range" list="rangeList" />
+
+    <datalist id="rangeList">
+      <option value="0" label="0"></option>
+      <option value="30" label="30"></option>
+    </datalist>
+
+  </div>
+</div>
+
+<div class="form-group row col-sm-12">
+  <label for="Username" class="col-sm-2 col-form-label">Manager:</label>
+  <div class="col-sm-8">
+    <input type="text" disabled="disabled" [(ngModel)]="currentProject.Username" name="Username" class="form-control" />
+  </div>
+  <div class="col-sm-2">
+    <input type="button" value="Search" class="btn btn-primary form-control" data-toggle="modal" data-target="#userModal" />
+    
+  </div>
+</div>
+<div class="row col-auto">
+  <div class="ml-auto mx-3">
+    <input type="submit" value="{{addEditButtonText}}" (click)="createOrUpdateProject()" class="btn btn-secondary mx-4" />
+    <input type="submit" value="Reset" (click)="resetValues()" class="btn btn-secondary" />
+  </div>
+</div>
+
+<div class="form-group row col-sm-12" *ngIf='successMessage'>
+  <label for="successMessage" class="col-sm-10 col-form-label text-success">{{successMessage}}</label>
+</div>
+<div class="form-group row col-sm-12" *ngIf='errorMessage'>
+  <label for="errorMessage" class="col-sm-10 col-form-label text-danger">{{errorMessage}}</label>
+</div>
+
+<hr />
+
+<div class="row col-sm-12">
+ 
+    <input type="search" [(ngModel)]="projectFilter" placeholder="Search" class="form-control" />
+
+</div>
+<div class="row my-2 col-sm-12">
+  <div class="col-sm-2">
+    <label for="sort" class="col-form-label">Sort By:</label>
+  </div>
+  <div class="col-sm-2">
+    <input type="submit" value="Start Date" (click)="sortByStartDate()" class="btn btn-secondary btn-sm form-control" />
+  </div>
+  <div class="col-sm-2">
+    <input type="submit" value="End Date" (click)="sortByEndDate()" class="btn btn-secondary btn-sm form-control" />
+  </div>
+  <div class="col-sm-2">
+    <input type="submit" value="Priority" (click)="sortByPriority()" class="btn btn-secondary btn-sm form-control" />
+  </div>
+  <div class="col-sm-2">
+    <input type="submit" value="Completed" (click)="sortByCompleted()" class="btn btn-secondary btn-sm form-control" />
+  </div>
+</div>
+
+<hr />
+
+<div *ngIf='filteredProjects && filteredProjects.length'>
+  <div class="my-2" *ngFor='let project of filteredProjects'>
+    <div class="row col-12">
+      <div class="list-group-item col-9">
+        <div class="row">
+          <div class="col">
+            <div class="">
+              <b>Project:</b> {{project.Project_Name}}
+            </div>            
+          </div>          
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class=""><b>No of Tasks:</b> {{project.TotalTasks}}</div>
+            
+          </div>
+          <div class="col-6">
+            <div class=""><b>Completed:</b> {{project.TotalCompleted}}</div>
+            
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <div class=""><b>Start Date:</b> {{project.StartDate | date}}</div>
+            
+          </div>
+          <div class="col-6">
+            <div class=""><b>End Date:</b> {{project.EndDate | date}}</div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col-1 text-center">
+        <div class="row">
+          <div class="col">
+            Priority: {{project.Priority}}
+          </div>
+        </div>
+      </div>      
+      <div class="offset-1 col-1">
+        <div class="row">
+          <a class="btn btn-primary col" [routerLink]="['/AddProject', project.ProjectId]" (click)="getCurrentProjectDetails()">Edit</a>
+        </div>
+        <div class="row">
+          <a class="btn btn-primary my-2 col text-white" (click)="deleteProject()">Suspend</a>
+        </div>
+      </div>
+    </div>
+    <hr class="hr" />
+  </div>
+</div>
+
+<!-- User Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userModalLabel">Manager List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group row d-flex justify-content-center col-auto">
+          <div class="col">
+            <input type="search" [(ngModel)]="userFilter" placeholder="Search" class="form-control" />
+          </div>          
+        </div>
+
+        <hr class="hr" />
+
+        <div *ngIf='filteredUsers && filteredUsers.length'>
+          <div class="my-2" *ngFor='let user of filteredUsers'>
+            <div class="row">
+              <div class="col-9">
+                <ul class="list-group">
+                  <li class="list-group-item">{{user.FirstName}}</li>
+                  <li class="list-group-item">{{user.LastName}}</li>
+                  <li class="list-group-item">{{user.EmployeeId}}</li>
+                </ul>
+              </div>
+              <div class="col-2">
+                <div class="row">
+                  <button type="submit" value="{{user.UserId}}" class="btn btn-primary col" (click)="selectCurrentUserDetails($event)" data-dismiss="modal">Select</button>
+                </div>                
+              </div>
+            </div>
+            <hr class="hr" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>        
+      </div>
+    </div>
+  </div>
+</div>

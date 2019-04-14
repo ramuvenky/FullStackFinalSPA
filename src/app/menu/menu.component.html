@@ -1,0 +1,15 @@
+﻿
+  <div class="navbar navbar-expand-lg navbar-dark bg-info shadow mb-3">
+    <a [routerLink]="['/AddProject']" class="navbar-brand text-white">Project Management</a>
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navBarNav" aria-controls="navBarNav" aria-expanded="true" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navBarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a [routerLink]="['/AddProject']" class="nav-link text-white">Add Project</a></li>
+        <li class="nav-item"><a [routerLink]="['/AddTask']" class="nav-link text-white">Add Task</a></li>
+        <li class="nav-item"><a [routerLink]="['/AddUser']" class="nav-link text-white">Add User</a></li>
+        <li class="nav-item"><a [routerLink]="['/ViewTask']" class="nav-link text-white">View Task</a></li>
+      </ul>
+    </div>
+  </div>
