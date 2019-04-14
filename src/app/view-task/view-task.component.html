@@ -1,0 +1,119 @@
+﻿<div class="form-group row col-sm-12">
+  <label for="Project_Name" class="col-sm-1 col-form-label">Project:</label>
+  <div class="col-sm-3">
+    <input type="text" disabled="disabled" [(ngModel)]="project_Name" name="project_Name" class="form-control" />
+  </div>
+  <div class="col-sm-1">
+    <input type="button" value="Search" class="btn btn-primary" data-toggle="modal" data-target="#projectModal" />
+  </div>
+  <div class="col-sm-2 text-right">
+    <label for="sort" class="col-form-label mx-2">Sort Task By:</label>
+  </div>
+  <div class="col-sm-1">
+    <input type="submit" value="Start Date" (click)="sortByStartDate()" class="btn btn-secondary btn-sm" />
+  </div>
+  <div class="col-sm-1">
+    <input type="submit" value="End Date" (click)="sortByEndDate()" class="btn btn-secondary btn-sm mx-2" />
+  </div>
+  <div class="col-sm-1">
+    <input type="submit" value="Priority" (click)="sortByPriority()" class="btn btn-secondary btn-sm mx-2" />
+  </div>
+  <div class="col-sm-1">
+    <input type="submit" value="Completed" (click)="sortByCompleted()" class="btn btn-secondary btn-sm" />
+  </div>
+</div>
+
+<hr />
+
+<div *ngIf='allTasks && allTasks.length'>
+  <div class="my-2" *ngFor='let task of allTasks'>
+    <div class="row col-12">
+      <div class="col-2">
+        <b>Task</b>
+      </div>
+      <div class="col-2">
+        <b>Parent</b>
+      </div>
+      <div class="col-1">
+        <b>Priority</b>
+      </div>
+      <div class="col-2">
+        <b>Start</b>
+      </div>
+      <div class="col-2">
+        <b>End</b>
+      </div>      
+    </div>
+    <div class="row col-12">
+      <div class="list-group-item text-center col-2">
+        {{task.Task_Name}}
+      </div>
+        <div class="list-group-item text-center col-2">
+          {{task.Parent_task}}
+        </div>
+        <div class="col-1">
+          {{task.Priority}}
+        </div>        
+        <div class="col-2">
+          {{task.Start_Date | date}}
+        </div>
+        <div class="col-2">
+          {{task.End_date | date}}
+        </div>
+      <div class="col-1">
+        <a class="btn btn-primary" [routerLink]="['/AddTask', task.TaskId]">Edit</a>
+      </div>
+      <div class="col-2">
+        <button type="submit" value="{{task.TaskId}}" class="btn btn-primary form-control text-white" (click)="EndTask($event)">End Task</button>
+      </div>      
+    </div>
+    <hr class="hr" />
+  </div>
+</div>
+
+
+<!-- Project Modal -->
+<div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-labelledby="projectModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="projectModalLabel">Project List</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group row d-flex justify-content-center col-auto">
+          <div class="col">
+            <input type="search" [(ngModel)]="projectFilter" placeholder="Search" class="form-control" />
+          </div>
+        </div>
+
+        <hr class="hr" />
+
+        <div *ngIf='filteredProjects && filteredProjects.length'>
+          <div class="my-2" *ngFor='let project of filteredProjects'>
+            <div class="row">
+              <div class="col-9">
+                <ul class="list-group">
+                  <li class="list-group-item">{{project.Project_Name}}</li>
+                  <li class="list-group-item">{{project.StartDate | date}} - {{project.EndDate | date}}</li>
+                  <li class="list-group-item">{{project.Username}}</li>
+                </ul>
+              </div>
+              <div class="col-2">
+                <div class="row">
+                  <button type="submit" value="{{project.ProjectId}}" class="btn btn-primary col" (click)="selectCurrentProjectDetails($event)" data-dismiss="modal">Select</button>
+                </div>
+              </div>
+            </div>
+            <hr class="hr" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

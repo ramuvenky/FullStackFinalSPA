@@ -1,0 +1,71 @@
+﻿
+<div class="form-group row col-sm-12">
+  <label for="firstname" class="col-sm-2 col-form-label">Firstname:</label>
+  <div class="col-sm-10">
+    <input type="text" [(ngModel)]="currentUser.FirstName" name="Firstname" class="form-control" />
+  </div>
+</div>
+<div class="form-group row col-sm-12">
+  <label for="lastName" class="col-sm-2 col-form-label">Lastname:</label>
+  <div class="col-sm-10">
+    <input type="text" [(ngModel)]="currentUser.LastName" name="Lastname" class="form-control" />
+  </div>
+</div>
+<div class="form-group row col-sm-12">
+  <label for="employeeId" class="col-sm-2 col-form-label">Employee Id:</label>
+  <div class="col-sm-3">
+    <input type="text" [(ngModel)]="currentUser.EmployeeId" name="EmployeeId" class="form-control" />
+  </div>
+</div>
+<div class="row col-auto">
+  <div class="ml-auto mx-3">
+  <input type="submit" value="{{addEditButtonText}}" (click)="createOrUpdateUser()" class="btn btn-primary mx-4" />
+  <input type="submit" value="Reset" (click)="resetValues()" class="btn btn-primary" />
+    </div>
+</div>
+<div class="form-group row col-sm-12" *ngIf='successMessage'>
+  <label for="successMessage" class="col-sm-10 col-form-label text-success">{{successMessage}}</label>
+</div>
+<div class="form-group row col-sm-12" *ngIf='errorMessage'>
+  <label for="errorMessage" class="col-sm-10 col-form-label text-danger">{{errorMessage}}</label>
+</div>
+
+<hr />
+
+
+<div class="form-group row d-flex justify-content-center col-auto">
+  <div class="col">
+  <input type="search" [(ngModel)]="userFilter" placeholder="Search" class="form-control" />
+    </div>
+  <label for="sort" class="col-form-label">Sort:</label>
+  <input type="submit" value="Firstname" (click)="sortByFirstname()" class="mx-1 btn btn-secondary btn-sm" />
+  <input type="submit" value="Lastname" (click)="sortByLastname()" class="mx-1 btn btn-secondary btn-sm" />
+  <input type="submit" value="Id" (click)="sortById()" class="mx-1 btn btn-secondary btn-sm" />
+</div>
+
+<hr class="hr"/>
+
+<div *ngIf='filteredUsers && filteredUsers.length'>
+  <div class="my-2" *ngFor='let user of filteredUsers'>
+    <div class="row">
+      <div class="col-9">
+        <ul class="list-group">
+          <li class="list-group-item">{{user.FirstName}}</li>
+          <li class="list-group-item">{{user.LastName}}</li>
+          <li class="list-group-item">{{user.EmployeeId}}</li>
+        </ul>
+      </div>
+      <div class="col-2">
+        <div class="row">
+          <a class="btn btn-primary col" [routerLink]="['/AddUser', user.UserId]" (click)="getCurrentUserDetails()">Edit</a>
+        </div>
+        <div class="row">
+          <a class="btn btn-primary my-2 col text-white" (click)="deleteUser()">Delete</a>
+        </div>
+      </div>
+    </div>
+    <hr class="hr" />
+  </div>
+</div>
+
+
