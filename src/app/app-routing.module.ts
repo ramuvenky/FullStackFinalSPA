@@ -12,7 +12,8 @@ const routes: Routes = [
     { path: 'AddUser', component: AddUserComponent },
     { path: 'AddTask/:id', component: AddTaskComponent },
     { path: 'AddTask', component: AddTaskComponent },
-    { path: 'ViewTask', component: ViewTaskComponent }
+    { path: 'ViewTask', component: ViewTaskComponent },
+    { path: '', redirectTo: 'AddUser', pathMatch: 'full' }
 ];
 
 @NgModule({
